@@ -3,3 +3,38 @@
 
 import 'material-icons/iconfont/material-icons.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+import { getContacts, getContactById } from './js/service/contact.service';
+import { createContact } from './js/createContact';
+import { refs } from './js/refs';
+import { spinnerPlay, spinnerStop } from './js/spinner';
+
+// spinnerPlay();
+
+// getContacts()
+//   .then(data => {
+//     const markup = [...data].reverse().map(createContact);
+//     refs.list.insertAdjacentHTML('beforeend', markup.join(''));
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   })
+//   .finally(() => {
+//     spinnerStop();
+//   });
+
+//////////////////////////////////////////////
+
+spinnerPlay();
+
+getContactById(67)
+  .then(data => {
+    const markup = createContact(data);
+    refs.list.innerHTML = markup;
+  })
+  .catch(error => {
+    console.log(error);
+  })
+  .finally(() => {
+    spinnerStop();
+  });
