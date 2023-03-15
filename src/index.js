@@ -8,7 +8,6 @@ import { getContacts, getContactById } from './js/service/contact.service';
 import { createContact } from './js/createContact';
 import { refs } from './js/refs';
 import { spinnerPlay, spinnerStop } from './js/spinner';
-import { load, save } from './js/localStorage';
 
 // spinnerPlay();
 
