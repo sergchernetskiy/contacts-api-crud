@@ -4,17 +4,37 @@
 import 'material-icons/iconfont/material-icons.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-import { getContacts, getContactById } from './js/service/contact.service';
-import { createContact } from './js/createContact';
+import {
+  getContacts,
+  getContactById,
+  updateContact,
+} from './js/service/contact.service';
+import { createContactMarkup } from './js/createContact';
 import { refs } from './js/refs';
 import { spinnerPlay, spinnerStop } from './js/spinner';
 
+spinnerPlay();
+
+getContacts()
+  .then(data => {
+    const markup = [...data].reverse().map(createContactMarkup);
+    refs.list.insertAdjacentHTML('beforeend', markup.join(''));
+  })
+  .catch(error => {
+    console.log(error);
+  })
+  .finally(() => {
+    spinnerStop();
+  });
+
+//////////////////////////////////////////////
+
 // spinnerPlay();
 
-// getContacts()
+// getContactById(67)
 //   .then(data => {
-//     const markup = [...data].reverse().map(createContact);
-//     refs.list.insertAdjacentHTML('beforeend', markup.join(''));
+//     const markup = createContactMarkup(data);
+//     refs.list.innerHTML = markup;
 //   })
 //   .catch(error => {
 //     console.log(error);
@@ -23,18 +43,21 @@ import { spinnerPlay, spinnerStop } from './js/spinner';
 //     spinnerStop();
 //   });
 
-//////////////////////////////////////////////
+////////////////////////////////////////////
 
-spinnerPlay();
+const updateBtn = () => {
+  spinnerPlay();
+  updateContact({ name: 'Serhii', id: 70 })
+    .then(data => {
+      console.log(data);
+      Notify.success(`${data.name} was updated!`);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+    .finally(() => {
+      spinnerStop();
+    });
+};
 
-getContactById(67)
-  .then(data => {
-    const markup = createContact(data);
-    refs.list.innerHTML = markup;
-  })
-  .catch(error => {
-    console.log(error);
-  })
-  .finally(() => {
-    spinnerStop();
-  });
+refs.updateBtn.addEventListener('click', updateBtn);
