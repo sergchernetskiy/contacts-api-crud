@@ -8,6 +8,7 @@ import {
   getContacts,
   getContactById,
   updateContact,
+  deleteContact,
 } from './js/service/contact.service';
 import { createContactMarkup } from './js/createContact';
 import { refs } from './js/refs';
@@ -47,10 +48,10 @@ getContacts()
 
 const updateBtn = () => {
   spinnerPlay();
-  updateContact({ name: 'Serhii', id: 70 })
+  updateContact({ name: 'Serhii', id: 66 })
     .then(data => {
-      console.log(data);
       Notify.success(`${data.name} was updated!`);
+      location.reload();
     })
     .catch(error => {
       console.log(error);
@@ -61,3 +62,31 @@ const updateBtn = () => {
 };
 
 refs.updateBtn.addEventListener('click', updateBtn);
+
+const deleteContactCard = e => {
+  if (e.target.nodeName !== 'BUTTON') {
+    return;
+  }
+
+  const item = e.target.closest('.js-contact-card');
+
+  if (!item) {
+    return;
+  }
+
+  spinnerPlay();
+
+  deleteContact(item.dataset.id)
+    .then(data => {
+      Notify.info(`${data.name} was deleted!`);
+      item.remove();
+    })
+    .catch(error => {
+      console.log(error);
+    })
+    .finally(() => {
+      spinnerStop();
+    });
+};
+
+refs.list.addEventListener('click', deleteContactCard);
